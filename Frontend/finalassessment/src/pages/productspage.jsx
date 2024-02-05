@@ -3,9 +3,10 @@ import Navigation from "../components/navbar";
 import axios from "axios";
 import Productscard from "./productscard";
 import "./productspage.css"
+import TextField from "@mui/material/TextField";
 const Productspage = () => {
   const [product, setproduct] = useState();
-
+  const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -23,15 +24,25 @@ const Productspage = () => {
   return (
     <div>
       <Navigation />
+      <div className="searchbar">
+      <TextField 
+          id="outlined-basic"
+          variant="outlined"
+          fullWidth
+          label="Search"
+          value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+
+        /></div>
 <h1 style={{textAlign:"center"}}>Products</h1>
       <div className="Products-container">
 
 
-      {product && product.map((productData, index) => (
+      {product && product.filter((item) =>
+              (searchTerm === "" ||
+                (item.title && item.title.toLowerCase().includes(searchTerm.toLowerCase())))
+            ).map((productData, index) => (
         <Productscard key={index} product={productData} />
       ))}
-
-
 
 
       </div>
